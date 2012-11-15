@@ -1,0 +1,13 @@
+path = shell.path()
+path = path..":/disk/lib/:/lib/"
+shell.setPath (path)
+
+print("Would you like to update mupdater?")
+print("y/n")
+response=read()
+if response == "y" then
+	shell.run("rm","mupdater")
+	shell.run("pastebin","get","hEs6MJE3","mupdater")
+elseif response == "n" then
+	return 1
+end
