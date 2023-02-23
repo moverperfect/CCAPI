@@ -15,7 +15,7 @@ local update_choice = read()
 if update_choice == "y" then
     -- Remove the old mupdater file and download the new one from GitHub
     shell.run("rm", FILE_NAME)
-    result = shell.run("wget", "-f", GITHUB_URL, FILE_NAME)
+    result = shell.run("wget", GITHUB_URL, FILE_NAME)
     if not result then
         error("Failed to download new mupdater file from GitHub.")
     end
