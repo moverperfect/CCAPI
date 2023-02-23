@@ -1,5 +1,5 @@
 -- Define a constant variable for the GitHub URL prefix
-local GITHUB_PREFIX = "https://github.com/moverperfect/CCAPI/blob/release/1.0/"
+local GITHUB_PREFIX = "https://raw.githubusercontent.com/moverperfect/CCAPI/release/1.0/"
 
 -- Download a file from a GitHub URL
 function downloadFileFromGitHub(url, filename)

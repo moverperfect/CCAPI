@@ -1,5 +1,5 @@
 -- Constants
-local GITHUB_URL = "https://github.com/moverperfect/CCAPI/blob/release/1.0/mupdater.lua"
+local GITHUB_URL = "https://raw.githubusercontent.com/moverperfect/CCAPI/release/1.0/mupdater.lua"
 local FILE_NAME = "mupdater.lua"
 
 -- Set the shell path
