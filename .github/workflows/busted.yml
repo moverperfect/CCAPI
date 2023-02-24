@@ -1,0 +1,20 @@
+name: Murtle Tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install lua5.3 liblua5.3-dev luarocks
+        sudo luarocks install busted
+
+    - name: Run tests
+      run: busted .
