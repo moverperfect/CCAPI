@@ -6,24 +6,31 @@ local FILE_NAME = "mupdater.lua"
 local path = shell.path() .. ":/disk/lib/:/lib/"
 shell.setPath(path)
 
--- Ask the user if they want to update mupdater
-print("Would you like to update mupdater?")
-print("Enter 'y' for yes or 'n' for no.")
-local update_choice = read()
-
--- Handle the user's input
-if update_choice == "y" then
-  -- Remove the old mupdater file and download the new one from GitHub
-  shell.run("rm", FILE_NAME)
-  result = shell.run("wget", GITHUB_URL, FILE_NAME)
-  if not result then
-      error("Failed to download new mupdater file from GitHub.")
-  end
-  print("mupdater updated successfully.")
-elseif update_choice == "n" then
-  -- Do nothing and exit
-  return nil
-else
-  -- Handle unexpected input
-  error("Invalid input. Please enter 'y' for yes or 'n' for no.")
+-- Check if there is a new version of the file on GitHub
+local github_file = http.get(GITHUB_URL)
+if not github_file then
+    error("Failed to download latest version of mupdater file from GitHub.")
 end
+
+local github_content = github_file.readAll()
+github_file.close()
+
+local local_file = fs.open(FILE_NAME, "r")
+if local_file then
+    local local_content = local_file.readAll()
+    local_file.close()
+
+    if github_content == local_content then
+        print("mupdater is up to date.")
+        return nil
+    end
+end
+
+-- Download the latest version of the file from GitHub
+shell.run("rm", FILE_NAME)
+local result = shell.run("wget", GITHUB_URL, FILE_NAME)
+if not result then
+    error("Failed to download latest version of mupdater file from GitHub.")
+end
+
+print("mupdater updated successfully.")
