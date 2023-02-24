@@ -25,9 +25,9 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install libev-dev
-        sudo luarocks install busted
-        sudo luarocks install luacov
-        sudo luarocks install luacov-coveralls
+        luarocks install busted
+        luarocks install luacov
+        luarocks install luacov-coveralls
 
     - name: Run tests
       run: busted --coverage --lpath="" --cpath="" --output=gtest -Xoutput --color .
