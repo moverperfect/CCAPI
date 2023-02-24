@@ -30,7 +30,7 @@ jobs:
         luarocks install luacov-cobertura
 
     - name: Run tests
-      run: busted --coverage --lpath="" --cpath="" --output=junit -Xoutput test_results.xml .
+      run: busted --coverage --output=junit -Xoutput test_results.xml .
 
     - name: Generate Test Coverage Report
       run: luacov-cobertura
