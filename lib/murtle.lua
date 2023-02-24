@@ -1,103 +1,87 @@
 -- Murtle API
 -- By moverperfect
 
--- for more visit
--- 
-
+-- Forward function
 function fwd(n)
-	if n == nil then
-		n=1
-	end
-	for i=1, n do
-		while not turtle.forward() do
-			turtle.dig()
-		end
-	end
+  n = n or 1 -- Use a shorthand to set a default value for n
+  for i = 1, n do
+    while not turtle.forward() do
+      turtle.dig()
+    end
+  end
 end
 
+-- Down function
 function down(n)
-	if n == nil then
-		n=1
-	end
-	for i=1, n do
-		while not turtle.down() do
-			turtle.digDown()
-		end
-	end
+  n = n or 1
+  for i = 1, n do
+    while not turtle.down() do
+      turtle.digDown()
+    end
+  end
 end
 
+-- Up function
 function up(n)
-	if n == nil then
-		n=1
-	end
-	for i=1, n do
-		while not turtle.up() do
-			turtle.digUp()
-		end
-	end
+  n = n or 1
+  for i = 1, n do
+    while not turtle.up() do
+      turtle.digUp()
+    end
+  end
 end
 
+-- Back function
 function back(n)
-	if n == nil then
-		n=1
-	end
-	for i=1,n do
-		turtle.back()
-	end
+  n = n or 1
+  for i = 1, n do
+    turtle.back()
+  end
 end
 
+-- Turn left function
 function left(n)
-	if n == nil then
-		n = 1
-	end
-	for i=1, n do
-		turtle.turnLeft()
-	end
+  n = n or 1
+  for i = 1, n do
+    turtle.turnLeft()
+  end
 end
 
+-- Turn right function
 function right(n)
-	if n == nil then
-		n = 1
-	end
-	for i=1,n do
-		turtle.turnRight()
-	end
+  n = n or 1
+  for i = 1, n do
+    turtle.turnRight()
+  end
 end
 
+-- Turn right function
 function turnright()
-	turtle.turnRight()
-	fwd()
-	turtle.turnRight()
+  turtle.turnRight()
+  fwd()
+  turtle.turnRight()
 end
 
+-- Turn left function
 function turnleft()
-	turtle.turnLeft()
-	fwd()
-	turtle.turnLeft()
+  turtle.turnLeft()
+  fwd()
+  turtle.turnLeft()
 end
 
+-- Place block below function
 function placedown(s)
-	if s == nil then
-		turtle.placeDown()
-	else
-		turtle.select(s)
-		turtle.placeDown()
-	end
+  if s then turtle.select(s) end
+  turtle.placeDown()
 end
 
+-- Place block above function
 function placeup(s)
-	if s == nil then
-		turtle.placeUp()
-	else
-		turtle.select(s)
-		turtle.placeUp()
-	end
+  if s then turtle.select(s) end
+  turtle.placeUp()
 end
 
+-- Check even function
 function checkeven(n)
-	if n % 2 == 0 then
-		return true
-	else
-		return false
-	end
+  return n % 2 == 0
 end
