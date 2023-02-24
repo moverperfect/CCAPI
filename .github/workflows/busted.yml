@@ -3,18 +3,38 @@ name: Murtle Tests
 on: [push, pull_request]
 
 jobs:
-  build:
+  busted:
+    strategy:
+      fail-fast: false
+      matrix:
+        luaVersion: [ "5.4", "5.3", "5.2", "5.1", "luajit" ]
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Setup ‘lua’
+        uses: leafo/gh-actions-lua@v9
+        with:
+          luaVersion: ${{ matrix.luaVersion }}
+
+    - name: Setup ‘luarocks’
+        uses: leafo/gh-actions-luarocks@v4
+
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install lua5.3 liblua5.3-dev luarocks
+        sudo apt-get install libev-dev
         sudo luarocks install busted
+        sudo luarocks install luacov
+        sudo luarocks install luacov-coveralls
 
     - name: Run tests
-      run: busted .
+      run: busted --coverage --lpath="" --cpath="" --output=gtest -Xoutput --color .
+
+    - name: Report test coverage
+        if: ${{ success() }}
+        continue-on-error: true
+        run: luacov-coveralls -i src -e .luarocks
+        env:
+          COVERALLS_REPO_TOKEN: ${{ github.token }}
