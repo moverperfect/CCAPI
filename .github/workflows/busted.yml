@@ -28,12 +28,13 @@ jobs:
         luarocks install busted
         luarocks install luacov
         luarocks install luacov-cobertura
+        luarocks install luacov-reporter-lcov
 
     - name: Run tests
       run: busted --coverage --output=junit -Xoutput test_results.xml .
 
     - name: Generate Test Coverage Report
-      run: luacov-cobertura
+      run: luacov -r lcov
 
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
@@ -42,21 +43,11 @@ jobs:
         files: |
           test_results.xml
 
-    # - name: Code Coverage Report
-    #   uses: irongut/CodeCoverageSummary@v1.3.0
-    #   with:
-    #     filename: luacov.report.out
-    #     badge: true
-    #     fail_below_min: true
-    #     format: markdown
-    #     hide_branch_rate: false
-    #     hide_complexity: true
-    #     indicators: true
-    #     output: both
-
-    # - name: Add Coverage PR Comment
-    #   uses: marocchino/sticky-pull-request-comment@v2
-    #   if: github.event_name == 'pull_request'
-    #   with:
-    #     recreate: true
-    #     path: code-coverage-results.md
+    - name: Report code coverage
+      uses: zgosalvez/github-actions-report-lcov@v3
+      with:
+        coverage-files: luacov.report.out
+        minimum-coverage: 80
+        artifact-name: code-coverage-report
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        update-comment: true
