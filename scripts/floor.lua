@@ -1,57 +1,67 @@
 -- Floor script
--- Needs murtle to work
+-- Requires Murtle library
 
-local arg = {...}
-if arg == nil then
-	print("Usage: floor <z-size> <x-size> <side(1-place down(default) 2-place up)>")
-	return 2
+-- Get command line arguments
+local args = {...}
+
+-- Check number of arguments
+if #args < 2 or #args > 3 then
+  print("Usage: floor <z-size> <x-size> [<side(1-place down, 2-place up)>]")
+  return 2
 end
 
-z = tonumber (arg[1])
-x = tonumber (arg[2])
-side = tonumber(arg[3])
+-- Parse arguments
+local z = tonumber(args[1])
+local x = tonumber(args[2])
+local side = tonumber(args[3]) or 1
 
-path=shell.resolveProgram("murtle")
-if path==nil or not os.loadAPI(path) then
-  print("Cant load library: murtle")
+-- Resolve Murtle API
+local path = shell.resolveProgram("murtle")
+if path == nil or not os.loadAPI(path) then
+  print("Can't load library: murtle")
   return 1
 end
 
-function place() 
-	if side == nil or side == 1 then
-		murtle.placedown()
-	elseif side == 2 then
-		murtle.placeup()
-	end
+-- Function to place a block depending on the side
+local function placeBlock()
+  if side == nil or side == 1 then
+    murtle.placedown()
+  elseif side == 2 then
+    murtle.placeup()
+  end
 end
 
-if murtle.checkeven(x) then
-	repet = x/2
-	prop = 0
-else
-	repet = (x-1)/2
-	prop = 1
+-- Function to build a row of blocks
+local function buildRow(length)
+  placeBlock()
+  for i = 1, length - 1 do
+    murtle.fwd()
+    placeBlock()
+  end
 end
 
-for i=1, repet do
-	place()
-	for f=1, z-1 do
-		murtle.fwd()
-		place()
-	end
-	murtle.turnright()
-	place()
-	for f=1, z-1 do
-		murtle.fwd()
-		place()
-	end
-	murtle.turnleft()
+-- Function to build the floor
+local function buildFloor()
+  -- Determine if the width is even or odd
+  local isWidthEven = x % 2 == 0
+  -- Determine how many iterations are needed to build a floor
+  local widthIterations = isWidthEven and x / 2 or math.floor((x - 1) / 2)
+  -- Determine if an additional row is needed to cover the remaining space
+  local widthOffset = isWidthEven and 0 or 1
+
+  -- Build each row of blocks, alternating directions
+  for i = 1, widthIterations do
+      buildRow(z)
+      murtle.turnright()
+      buildRow(z)
+      murtle.turnleft()
+  end
+
+  -- Build an additional row if necessary
+  if widthOffset == 1 then
+      buildRow(z)
+  end
 end
 
-for a=1, prop do
-	place()
-	for i=1, z-1 do
-		murtle.fwd()
-		place()
-	end
-end
+-- Call the buildFloor function to build the floor
+buildFloor()
